@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Explorer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>🌎Country Explorer</h1>
+        <input type="text" id="search" placeholder="Search by name...">
+        <select id="region-filter">
+            <option value="">All Regions</option>
+            <option value="Africa">Africa</option>
+            <option value="Americas">Americas</option>
+            <option value="Europe">Europe</option>
+            <option value="Oceania">Oceania</option>
+            <option value="Asia">Asia</option>
+        </select>
+        <select id="sort-population">
+            <option class="bold" value="">Sort by Population</option>
+            <option class="bold" value="ascend">Ascending</option>
+            <option class="bold" value="descend">Descending</option>
+        </select>
+        <div id="country-list" class="country"></div>
+        <button id="load-more">Load More</button>
+        
+        <h6 class="done">Done by WemDev.</h6>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
