@@ -35,8 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('https://restcountries.com/v3.1/all?fields=name,capital,region,flags,population')
             .then(response => response.json())
             .then(data => {
+                console.log(countries);
+                
                 countries = data;
-                displayCountries();
+                console.log(countries);
+                
+                
+                displayCountries(countries);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -57,8 +62,65 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial data fetch
     fetchCountryData();
 
-    // Display countries
-    function displayCountries() {
+
+
+    // Region filter functionality
+    regionFilter.addEventListener('change', () => {
+        filterCountries();
+    });
+
+    // Sort by population functionality
+    sortPopulation.addEventListener('change', () => {
+        sortCountriesByPopulation(); // Automatically sort by population when changed
+    });
+
+    // Filter countries based on search and region
+    
+    function filterCountries() {
+        const filterText = searchInput.value.toLowerCase();
+        const selectedRegion = regionFilter.value;
+
+        
+        
+        
+        const filteredCountries = countries.filter(country => {
+            const matchesName = country.name.common.toLowerCase().includes(filterText);
+            const matchesRegion = selectedRegion ? country.region === selectedRegion : true;
+            return matchesName && matchesRegion;
+        });
+
+        
+        currentPage = 0; // Reset pagination
+        displayCountries(filteredCountries); // Display filtered countries
+
+       
+    }
+
+    // Sort countries by region
+    function sortCountriesByRegion() {
+        countries.sort((a, b) => {
+            return a.region.localeCompare(b.region);
+        });
+        currentPage = 0; // Reset pagination
+        displayCountries(); // Display sorted countries
+    }
+
+    // Sort countries by population
+    function sortCountriesByPopulation() {
+        const sortOrder = sortPopulation.value;
+
+        if (sortOrder === 'asc') {
+            countries.sort((a, b) => a.population - b.population);
+        } else if (sortOrder === 'desc') {
+            countries.sort((a, b) => b.population - a.population);
+        }
+
+        currentPage = 0; // Reset pagination
+        displayCountries(); // Display sorted countries
+    }
+
+        // Display countries
+    function displayCountries(countries) {
         const start = currentPage * countriesPerPage;
         const end = start + countriesPerPage;
         const paginatedCountries = countries.slice(start, end);
@@ -91,62 +153,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Search functionality
     searchInput.addEventListener('input', () => {
         filterCountries();
-    });
-
-    // Region filter functionality
-    regionFilter.addEventListener('change', () => {
-        filterCountries();
-    });
-
-    // Sort by population functionality
-    sortPopulation.addEventListener('change', () => {
-        sortCountriesByPopulation(); // Automatically sort by population when changed
-    });
-
-    // Filter countries based on search and region
-    function filterCountries() {
-        const filterText = searchInput.value.toLowerCase();
-        const selectedRegion = regionFilter.value;
-
-        const filteredCountries = countries.filter(country => {
-            const matchesName = country.name.common.toLowerCase().includes(filterText);
-            const matchesRegion = selectedRegion ? country.region === selectedRegion : true;
-            return matchesName && matchesRegion;
-        });
-
-        countries = filteredCountries;
-        currentPage = 0; // Reset pagination
-        displayCountries(); // Display filtered countries
-    }
-
-    // Sort countries by region
-    function sortCountriesByRegion() {
-        countries.sort((a, b) => {
-            return a.region.localeCompare(b.region);
-        });
-        currentPage = 0; // Reset pagination
-        displayCountries(); // Display sorted countries
-    }
-
-    // Sort countries by population
-    function sortCountriesByPopulation() {
-        const sortOrder = sortPopulation.value;
-
-        if (sortOrder === 'asc') {
-            countries.sort((a, b) => a.population - b.population);
-        } else if (sortOrder === 'desc') {
-            countries.sort((a, b) => b.population - a.population);
-        }
-
-        currentPage = 0; // Reset pagination
-        displayCountries(); // Display sorted countries
-    }
-
+    }); 
     // Load more countries
     loadMoreButton.addEventListener('click', () => {
         displayCountries();
     });
 
     // Button to toggle between API and mock data
-    useMockDataButton.addEventListener('click', toggleDataSource);
+    useMockDataButton.addEventListener('click', () => {
+         toggleDataSource
+    
+})
 });
